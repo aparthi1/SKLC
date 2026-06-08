@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poolampatti Boys</title>
+  <link rel="icon" type="image/jpeg" href="images/favicon.jpg" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+<div id="globalLoader" style="display:none;">
+  <div class="loader-backdrop"></div>
+  <div class="loader-content">
+    <div class="spinner"></div>
+    <div class="loader-text">Loading…</div>
+  </div>
+</div>
+
+
+<body>
+
+
+  <!-- Navbar -->
+  <nav class="nav">
+    <div data-view="home" class="nav-link">
+      <img src="images/LogoKLC.png" alt="SRI KADESHWARA LAY CUTTING Logo" class="logo">
+      <span>SRI KADESHWARA LAY CUTTING</span>
+  </div>
+  </nav>
+
+  <!-- Views -->
+  <main>
+    <!-- Home view -->
+    <section id="view-home" class="view">
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="images/group1.jpg" alt="Group 1" /></div>
+          <div class="swiper-slide"><img src="images/group2.jpg" alt="Group 2" /></div>
+          <div class="swiper-slide"><img src="images/group3.jpg" alt="Group 3" /></div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+    <!-- Login view -->
+    <section id="view-login" class="view" style="">
+      <h2>Login</h2>
+      <form id="loginForm" class="login-form">
+        <label>Username</label>
+        <input id="username" required placeholder="" />
+        <label>Password</label>
+        <input id="password" type="password" required placeholder="" />
+        <button type="submit">Login</button>
+        <p id="loginError" class="error" style="display:none;"></p>
+      </form>
+    </section>
+
+
+  </main>
+
+  <!-- Modal: Add/Edit User (includes file input that goes to crop) -->
+  <div id="userModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3 id="userModalTitle">Add / Edit User</h3>
+      <form id="userForm">
+        <p>Name</p>
+        <input type="text" id="userName" required></input>
+        <p>Mobile (digits only)</p>
+        <input type="text" id="userPhone" maxlength="10" required />
+        <p>Choose Image (jpg)</p>
+        <input id="userFile" type="file" accept="image/jpeg" />
+        <div style="margin-top:8px; display:flex; gap:8px; justify-content:flex-end;">
+          <button type="button" id="userCancel">Cancel</button>
+          <button type="submit" id="userSave">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Cropper -->
+  <div id="cropModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:520px;">
+      <h3 id="cropTitle">Crop Image</h3>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <canvas id="cropCanvas" style="border:1px solid #ddd; width:100%; max-width:460px; height:320px;"></canvas>
+        <div style="min-width:120px;">
+          <p>Zoom</p>
+          <input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1" />
+          <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+            <button id="cropCancel">Cancel</button>
+            <button id="cropSave">Save Crop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- load main script (script.js does fetch('data.json')) -->
+  <script src="script.js"></script>
+
+</body>
+</html>

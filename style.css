@@ -1,0 +1,445 @@
+/* base */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f6fa;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+     padding-top: 60px;
+  }
+  .search-box {
+  margin: 10px auto;
+  text-align: center;
+}
+html, body {
+  margin: 0;
+  overflow-x: hidden !important;
+}
+.cards-container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+/* global fix */
+* {
+  box-sizing: border-box;
+}
+#contactCard {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-top: 20px;
+}
+#searchInput {
+  width: 70%;
+  max-width: 350px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #2c3e50;
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+}
+
+  /* navbar */
+nav.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+  nav .nav-left { font-weight:700; color:#2c3e50; }
+  nav .nav-links { list-style:none; margin:0; display:flex; gap:12px; padding:0; }
+  nav .nav-links li { }
+  nav .nav-links a { text-decoration:none; color:#2c3e50; padding:6px 10px; border-radius:6px; }
+  nav .nav-links a:hover { background:#eee; }
+  
+  /* Title */
+  .title { margin: 18px 0; font-size: 2rem; color: #2c3e50; }
+  
+  /* Slider */
+  .swiper { width:100%; height:220px; }
+  .swiper-slide img { width:100%; height:100%; object-fit:cover; }
+  
+  /* Cards layout */
+  .cards-container {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    padding:20px;
+  }
+  
+  .card {
+    background:white;
+    border-radius:12px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    padding:12px;
+    transition:transform .18s ease;
+    cursor:pointer;
+  }
+  .card:hover { transform:translateY(-6px); }
+  .card img { width:100%; height:200px; object-fit:cover; border-radius:8px; }
+  .card h3 { margin:10px 0 6px; color:#2c3e50; }
+  .call-btn {
+    display:inline-block;
+    background:#27ae60;
+    color:white;
+    padding:8px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:500;
+  }
+  
+  /* login form */
+  .login-form { display:inline-block; text-align:left; padding:16px; background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+  .login-form label { display:block; margin-top:8px; font-weight:600; }
+  .login-form input { width:240px; padding:8px; margin-top:6px; border-radius:6px; border:1px solid #ccc; }
+  .login-form button { margin-top:12px; padding:10px 14px; border-radius:8px; border:none; background:#2c3e50; color:#fff; cursor:pointer; }
+  .error { color: #c0392b; margin-top:8px; }
+  
+  /* upload view extra */
+  .logout { margin:12px; padding:8px 12px; border-radius:8px; background:#e74c3c; color:#fff; border:none; cursor:pointer; }
+  
+  /* modal */
+  .modal {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.45);
+  }
+  .modal-content {
+    background:#fff; padding:18px; border-radius:10px; width:320px; text-align:left;
+  }
+  .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
+  .modal-actions button { padding:8px 10px; border-radius:6px; border:none; cursor:pointer; }
+
+  /* ---------- prevent overflow & force safe sizing ---------- */
+
+/* make sure grid and cards never overflow */
+.cards-container {
+  width: 100%;
+  padding: 18px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* card */
+.card {
+  max-width: 100%;
+  overflow: hidden;   /* hide anything that tries to stick out */
+  display: block;
+}
+
+/* images: never exceed container and crop with cover (prevents huge full-size rendering) */
+.card img {
+  width: 100%;
+  max-width: 100%;
+  height: 200px;            /* desktop card image height */
+  object-fit: cover;        /* crop to fit without changing layout */
+  display: block;
+  border-radius: 8px;
+  -webkit-user-drag: none;  /* prevent dragging which opens image in some mobile browsers */
+  user-select: none;        /* prevent selection */
+  touch-action: manipulation;
+  pointer-events: auto;     /* allow click on parent card (we'll manage events in JS) */
+}
+
+/* smaller images on narrow screens so long images don't push page length */
+@media (max-width: 420px) {
+  .card img { height: 160px; }
+}
+.card img {
+  width: 100%;
+  height: 220px;         /* card image height */
+  object-fit: cover;     /* keeps card compact */
+  object-position: center 35%; /* shift crop slightly up (35% from top) */
+  display: block;
+  border-radius: 8px;
+}
+/* --------- Improved modal (replace existing .modal rules) --------- */
+
+/* ------------------------ MODAL BACKDROP ------------------------ */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;                /* JS will set display:flex */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  padding: 20px;                /* safe area for small mobile */
+}
+
+/* prevent background scroll */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* ------------------------ USER MODAL ------------------------ */
+#userModal .modal-content {
+  width: 420px;
+  max-width: 95%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.22);
+  text-align: left;
+  animation: modalPop 0.18s ease-out;
+}
+
+#userModal h3 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+/* form rows */
+#userModal p {
+  display: block;
+  margin: 10px 0 4px;
+  font-weight: 600;
+}
+
+
+
+#userModal .modal-actions,
+#userModal form div[style*="justify-content:flex-end"] {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#userModal button {
+  padding: 8px 14px;
+  border-radius: 7px;
+  border: 1px solid #bbb;
+  background: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+#userModal button[type="submit"] {
+  background: #2c3e50;
+  color: #fff;
+  border-color: #2c3e50;
+}
+
+/* ------------------------ CROP MODAL ------------------------ */
+#cropModal .modal-content {
+  width: 520px;
+  max-width: 95%;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  text-align: left;
+  animation: modalPop 0.18s ease-out;
+}
+
+#cropModal h3 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+/* canvas */
+#cropCanvas {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  box-shadow: inset 0 0 0 1px #efefef;
+}
+
+/* zoom control */
+#zoomRange {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* crop buttons */
+#cropModal .modal-actions,
+#cropModal div[style*="justify-content:flex-end"] {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#cropModal button {
+  padding: 8px 14px;
+  border-radius: 7px;
+  border: 1px solid #bbb;
+  background: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+#cropSave {
+  background: #2c3e50 !important;
+  color: #fff;
+  border-color: #2c3e50 !important;
+}
+
+/* ------------------------ ANIMATION ------------------------ */
+@keyframes modalPop {
+  0%   { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+/* Clean & Sharp Input Border Style */
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="number"],
+.modal-content input[type="file"] {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid greenyellow;     /* 🔥 strong normal border */
+  font-size: 15px;
+  background: #ffffff;
+  transition: 0.2s ease;
+  outline: none;
+}
+
+/* Slight hover highlight */
+.modal-content input:hover {
+  border-color: #9e9e9e;
+}
+
+/* Focus = clean dark border (not flashy) */
+.modal-content input:focus {
+  border-color: #2c3e50;         /* dark, professional color */
+  box-shadow: 0 0 3px rgba(0,0,0,0.18);
+  background: #fff;
+}
+/* Base Swiper Height (Mobile first) */
+.swiper {
+  width: 100%;
+  height: 220px;  /* Mobile height */
+}
+
+/* Slide must hide overflow for perfect cropping */
+.swiper .swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* Image: always fills area (no distortion) */
+.swiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* crop smart */
+  object-position: center;    /* center focus */
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Tablet View (bigger height) */
+@media (min-width: 480px) and (max-width: 900px) {
+  .swiper {
+    height: 260px;
+  }
+}
+
+/* Desktop View */
+@media (min-width: 900px) {
+  .swiper {
+    height: 320px; /* perfect height for PC */
+  }
+}
+/* refresh icon */
+#refreshBtn { color: #2c3e50; }
+#refreshBtn:hover { transform: rotate(20deg); transition: transform .18s; }
+
+/* small loading indicator badge (appears near nav-left) */
+#syncStatus {
+  display:inline-block;
+  margin-left:10px;
+  font-size:12px;
+  color:#666;
+}
+/* Loader overlay styles */
+#globalLoader { 
+  position: fixed;
+  inset: 0; 
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* disabled by default */
+}
+
+#globalLoader.show { pointer-events: all; }
+
+.loader-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(2px);
+}
+
+.loader-content {
+  position: relative;
+  z-index: 10000;
+  padding: 18px 22px;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  transform-origin: center;
+  min-width: 220px;
+}
+
+/* Spinner */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 4px solid rgba(0,0,0,0.08);
+  border-top-color: #3498db;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loader-text {
+  font-size: 15px;
+  color: #222;
+  font-weight: 600;
+}
+
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
