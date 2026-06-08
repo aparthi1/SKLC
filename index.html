@@ -55,46 +55,102 @@
       </form>
     </section>
 
-
-  </main>
-
-  <!-- Modal: Add/Edit User (includes file input that goes to crop) -->
-  <div id="userModal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <h3 id="userModalTitle">Add / Edit User</h3>
-      <form id="userForm">
-        <p>Name</p>
-        <input type="text" id="userName" required></input>
-        <p>Mobile (digits only)</p>
-        <input type="text" id="userPhone" maxlength="10" required />
-        <p>Choose Image (jpg)</p>
-        <input id="userFile" type="file" accept="image/jpeg" />
-        <div style="margin-top:8px; display:flex; gap:8px; justify-content:flex-end;">
-          <button type="button" id="userCancel">Cancel</button>
-          <button type="submit" id="userSave">Save</button>
+    <section id="view-table" class="view" style="display:none;">
+      <div class="table-header">
+        <button id="btnAddIO" class="add-btn">+ Add IO</button>
+      </div>
+      <div class="table-card">
+      <table border="1" id="ioTable">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Date</th>
+            <th>IO Number</th>
+            <th>Colour</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th><input type="text" id="date" placeholder="Date"></th>
+            <th><input type="text" id="filterIo" placeholder="Filter IO"></th><th>
+              <select id="filterColour">
+                <option value="">All Colours</option>
+              </select>
+            </th>
+            
+            <th>
+              <select id="filterSize">
+                <option value="">All Sizes</option>
+              </select>
+            </th>
+            <th><input type="text" id="filterQty" placeholder="Filter Qty"></th>
+            <th><input type="text" id="filterQty" placeholder="Toal Qty"></th>
+            
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      </div>
+    </section>
+    <div id="ioModal" class="modal">
+      <div class="modal-content">
+    
+        <div class="modal-header">
+          <h2>Add IO</h2>
+          <span class="close">&times;</span>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal: Cropper -->
-  <div id="cropModal" class="modal" style="display:none;">
-    <div class="modal-content" style="max-width:520px;">
-      <h3 id="cropTitle">Crop Image</h3>
-      <div style="display:flex; gap:12px; flex-wrap:wrap;">
-        <canvas id="cropCanvas" style="border:1px solid #ddd; width:100%; max-width:460px; height:320px;"></canvas>
-        <div style="min-width:120px;">
-          <p>Zoom</p>
-          <input id="zoomRange" type="range" min="1" max="3" step="0.01" value="1" />
-          <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
-            <button id="cropCancel">Cancel</button>
-            <button id="cropSave">Save Crop</button>
+    
+        <div class="form-row">
+          <label>IO Number</label>
+          <input type="text" id="ioNumber">
+        </div>
+    
+        <div class="form-row">
+          <label>Colour</label>
+          <select id="colour">
+            <option value="">Select Colour</option>
+            <option>Red</option>
+            <option>Blue</option>
+            <option>Green</option>
+          </select>
+        </div>
+    
+        <hr>
+    
+        <div id="sizeContainer">
+    
+          <div class="size-row">
+            <select class="size">
+              <option value="">Select Size</option>
+              <option>S</option>
+              <option>M</option>
+              <option>L</option>
+              <option>XL</option>
+              <option>XXL</option>
+            </select>
+    
+            <input type="number"
+                   class="qty"
+                   placeholder="Quantity">
+    
+            <button type="button"
+                    class="add-size">+</button>
           </div>
+    
         </div>
+    
+        <button id="saveIO" class="save-btn">
+          Save
+        </button>
+    
       </div>
     </div>
-  </div>
+  </main>
 
+ 
+ 
   <!-- load main script (script.js does fetch('data.json')) -->
   <script src="script.js"></script>
 
