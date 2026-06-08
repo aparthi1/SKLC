@@ -443,3 +443,11 @@ body.modal-open {
   align-items: center;
   gap: 10px;
 }
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  width: 100%;
+}
