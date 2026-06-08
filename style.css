@@ -116,16 +116,6 @@ nav.nav {
   /* upload view extra */
   .logout { margin:12px; padding:8px 12px; border-radius:8px; background:#e74c3c; color:#fff; border:none; cursor:pointer; }
   
-  /* modal */
-  .modal {
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.45);
-  }
-  .modal-content {
-    background:#fff; padding:18px; border-radius:10px; width:320px; text-align:left;
-  }
-  .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
-  .modal-actions button { padding:8px 10px; border-radius:6px; border:none; cursor:pointer; }
 
   /* ---------- prevent overflow & force safe sizing ---------- */
 
@@ -170,128 +160,7 @@ nav.nav {
   display: block;
   border-radius: 8px;
 }
-/* --------- Improved modal (replace existing .modal rules) --------- */
 
-/* ------------------------ MODAL BACKDROP ------------------------ */
-.modal {
-  position: fixed;
-  inset: 0;
-  display: none;                /* JS will set display:flex */
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.45);
-  z-index: 2000;
-  padding: 20px;                /* safe area for small mobile */
-}
-
-/* prevent background scroll */
-body.modal-open {
-  overflow: hidden;
-}
-
-/* ------------------------ USER MODAL ------------------------ */
-#userModal .modal-content {
-  width: 420px;
-  max-width: 95%;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 10px 35px rgba(0,0,0,0.22);
-  text-align: left;
-  animation: modalPop 0.18s ease-out;
-}
-
-#userModal h3 {
-  margin-top: 0;
-  font-size: 22px;
-  color: #2c3e50;
-  font-weight: 700;
-}
-
-/* form rows */
-#userModal p {
-  display: block;
-  margin: 10px 0 4px;
-  font-weight: 600;
-}
-
-
-
-#userModal .modal-actions,
-#userModal form div[style*="justify-content:flex-end"] {
-  margin-top: 14px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-#userModal button {
-  padding: 8px 14px;
-  border-radius: 7px;
-  border: 1px solid #bbb;
-  background: white;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-#userModal button[type="submit"] {
-  background: #2c3e50;
-  color: #fff;
-  border-color: #2c3e50;
-}
-
-/* ------------------------ CROP MODAL ------------------------ */
-#cropModal .modal-content {
-  width: 520px;
-  max-width: 95%;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-  text-align: left;
-  animation: modalPop 0.18s ease-out;
-}
-
-#cropModal h3 {
-  margin-top: 0;
-  font-size: 22px;
-  color: #2c3e50;
-  font-weight: 700;
-}
-
-/* canvas */
-#cropCanvas {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background: #f7f7f7;
-  box-shadow: inset 0 0 0 1px #efefef;
-}
-
-/* zoom control */
-#zoomRange {
-  width: 100%;
-  margin-top: 12px;
-}
-
-/* crop buttons */
-#cropModal .modal-actions,
-#cropModal div[style*="justify-content:flex-end"] {
-  margin-top: 12px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-#cropModal button {
-  padding: 8px 14px;
-  border-radius: 7px;
-  border: 1px solid #bbb;
-  background: white;
-  cursor: pointer;
-  font-size: 15px;
-}
 
 #cropSave {
   background: #2c3e50 !important;
@@ -299,38 +168,7 @@ body.modal-open {
   border-color: #2c3e50 !important;
 }
 
-/* ------------------------ ANIMATION ------------------------ */
-@keyframes modalPop {
-  0%   { transform: scale(0.92); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-/* Clean & Sharp Input Border Style */
-.modal-content input[type="text"],
-.modal-content input[type="password"],
-.modal-content input[type="number"],
-.modal-content input[type="file"] {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid greenyellow;     /* 🔥 strong normal border */
-  font-size: 15px;
-  background: #ffffff;
-  transition: 0.2s ease;
-  outline: none;
-}
 
-/* Slight hover highlight */
-.modal-content input:hover {
-  border-color: #9e9e9e;
-}
-
-/* Focus = clean dark border (not flashy) */
-.modal-content input:focus {
-  border-color: #2c3e50;         /* dark, professional color */
-  box-shadow: 0 0 3px rgba(0,0,0,0.18);
-  background: #fff;
-}
-/* Base Swiper Height (Mobile first) */
 .swiper {
   width: 100%;
   height: 220px;  /* Mobile height */
@@ -450,4 +288,185 @@ body.modal-open {
   gap: 10px;
   text-align: center;
   width: 100%;
+}
+/* Container */
+#view-table {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+/* Table */
+#ioTable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Header */
+#ioTable thead tr:first-child {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+}
+
+#ioTable th {
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Filter Row */
+#ioTable thead tr:nth-child(2) {
+  background: #f5f7fa;
+}
+
+#ioTable thead input {
+  width: 95%;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 13px;
+  outline: none;
+  transition: 0.3s;
+}
+
+#ioTable thead input:focus {
+  border-color: #2a5298;
+  box-shadow: 0 0 5px rgba(42,82,152,.3);
+}
+
+/* Body */
+#ioTable td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef2f7;
+  font-size: 14px;
+}
+
+/* Zebra Rows */
+#ioTable tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+/* Hover Effect */
+#ioTable tbody tr:hover {
+  background: #e8f1ff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Serial Number */
+#ioTable td:first-child {
+  font-weight: bold;
+  color: #2a5298;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #ioTable {
+    font-size: 12px;
+  }
+
+  #ioTable th,
+  #ioTable td {
+    padding: 10px;
+  }
+
+  #ioTable thead input {
+    width: 90%;
+  }
+}
+.add-btn{
+  background:#2a5298;
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:15px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:9999;
+}
+
+.modal-content{
+  width:650px;
+  max-width:95%;
+  background:#fff;
+  margin:40px auto;
+  border-radius:15px;
+  padding:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  font-size:28px;
+  cursor:pointer;
+}
+
+.form-row{
+  display:flex;
+  flex-direction:column;
+  margin-bottom:15px;
+}
+
+.form-row label{
+  margin-bottom:5px;
+  font-weight:600;
+}
+
+.form-row input,
+.form-row select{
+  padding:10px;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.size-row{
+  display:grid;
+  grid-template-columns: 1fr 1fr 60px;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.size-row select,
+.size-row input{
+  padding:10px;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.add-size,
+.remove-size{
+  border:none;
+  border-radius:8px;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.save-btn{
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  background:#2a5298;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
 }
