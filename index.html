@@ -57,9 +57,23 @@
 
     <section id="view-table" class="view" style="display:none;">
       <div class="table-header">
-        <button id="btnAddIO" class="add-btn">+ Add IO</button>
+        <button id="btnAddIO" class="add-btn">
+          ➕ Add New IO
+      </button>
+    
+    
+    <button id="btnExport" class="export-btn">
+        <i class="fa-solid fa-file-excel"></i>
+        Export Excel
+    </button>
+    
+    <button id="btnReport" class="report-btn">
+        <i class="fa-solid fa-chart-column"></i>
+        Report
+    </button>
       </div>
       <div class="table-card">
+        <div id="recordInfo" class="record-info"></div>
       <table border="1" id="ioTable">
         <thead>
           <tr>
@@ -73,25 +87,26 @@
           </tr>
           <tr>
             <th></th>
-            <th><input type="text" id="date" placeholder="Date"></th>
+            <th></th>
             <th><input type="text" id="filterIo" placeholder="Filter IO"></th><th>
-              <select id="filterColour">
+              <select id="filterColour" class="filter-select">
                 <option value="">All Colours</option>
-              </select>
+            </select>
             </th>
-            
             <th>
-              <select id="filterSize">
+            <select id="filterSize" class="filter-select">
                 <option value="">All Sizes</option>
-              </select>
+            </select>
             </th>
             <th><input type="text" id="filterQty" placeholder="Filter Qty"></th>
-            <th><input type="text" id="filterQty" placeholder="Toal Qty"></th>
+            <th></th>
             
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+      
+      <div id="pagination" class="pagination"></div>
       </div>
     </section>
     <div id="ioModal" class="modal">
@@ -147,12 +162,40 @@
     
       </div>
     </div>
+    <div id="reportModal" class="modal">
+
+      <div class="modal-content">
+    
+        <span id="closeReportModal" class="close">&times;</span>
+    
+        <h2>Generate Report</h2>
+    
+        <div class="form-group">
+          <label>From Date</label>
+          <input type="date" id="fromDate">
+        </div>
+    
+        <div class="form-group">
+          <label>To Date</label>
+          <input type="date" id="toDate">
+        </div>
+    
+        <button id="btnGenerateReport">
+          Generate Report
+        </button>
+    
+      </div>
+    
+    </div>
   </main>
 
  
  
   <!-- load main script (script.js does fetch('data.json')) -->
   <script src="script.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 </body>
 </html>
