@@ -101,149 +101,7 @@ loginForm.addEventListener("submit", async (e) => {
   }
 
   
-  document.getElementById("saveIO")
-  .addEventListener("click", async () => {
-    showLoader();
-    const saveBtn = document.getElementById("saveIO");
-    try{
-      saveBtn.disabled = true;
-      saveBtn.textContent = "Saving...";
-    const ioNumber =
-      document.getElementById("ioNumber").value.trim();
-  
-    const colour =
-      document.getElementById("colour").value;
-  
-    if (!ioNumber) {
-      alert("Enter IO Number");
-      return;
-    }
-  
-    if (!colour) {
-      alert("Select Colour");
-      return;
-    }
-  
-    const sizeRows =
-      document.querySelectorAll(".size-row");
-  
-    const payload = [];
-  
-    let hasError = false;
-  
-    sizeRows.forEach(row => {
-  
-      const size =
-        row.querySelector(".size").value;
-  
-      const qty =
-        row.querySelector(".qty").value;
-  
-      if (!size || !qty) {
-        hasError = true;
-        return;
-      }
-  
-      payload.push({
-        IoNumber: ioNumber,
-        Colour: colour,
-        Size: size,
-        Quantity: parseInt(qty)
-      });
-  
-    });
-  
-    if (hasError) {
-      alert("Please enter Size and Quantity for all rows");
-      return;
-    }
-  
-    if (payload.length === 0) {
-      alert("Add at least one Size");
-      return;
-    }
-  
-    console.log("Payload:", payload);
-  
-    try {
-  
-      const response = await fetch(
-        `${API_BASE}/api/ioInset`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        }
-      );
-  
-      const result = await response.json();
-  
-      if (!result.ok) {
-        alert(result.msg || "Save Failed");
-        return;
-      }
-  
-      alert("Saved Successfully");
-  
-      // Close Modal
-      document.getElementById("ioModal").style.display = "none";
-  
-      // Clear Form
-      document.getElementById("ioNumber").value = "";
-      document.getElementById("colour").value = "";
-  
-      document.getElementById("sizeContainer").innerHTML = `
-        <div class="size-row">
-          <select class="size">
-            <option value="">Select Size</option>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-            <option>XL</option>
-            <option>XXL</option>
-          </select>
-  
-          <input type="number"
-                 class="qty"
-                 placeholder="Quantity">
-  
-          <button type="button"
-                  class="add-size">+</button>
-        </div>
-      `;
-  
-      // Reload Table
-      const tableResponse =
-        await fetch(`${API_BASE}/api/io`);
-  
-      const tableResult =
-        await tableResponse.json();
-  
-      if (tableResult.ok) {
-        bindTable(tableResult.data);
-      }
-  
-    } catch (err) {
-      debugger
-      console.error(err);
-      alert("Server Error");
-    }
-  }catch(err){
 
-    console.error(err);
-    alert("Server Error");
- 
- }
- finally{
-  hideLoader();
-  saveBtn.disabled = false;
-  saveBtn.textContent = "Save";
- 
- }
-  
-  });
 });
 
 
@@ -318,6 +176,149 @@ document
 });
 });
 // Functions 
+document.getElementById("saveIO")
+.addEventListener("click", async () => {
+  showLoader();
+  const saveBtn = document.getElementById("saveIO");
+  try{
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+  const ioNumber =
+    document.getElementById("ioNumber").value.trim();
+
+  const colour =
+    document.getElementById("colour").value;
+
+  if (!ioNumber) {
+    alert("Enter IO Number");
+    return;
+  }
+
+  if (!colour) {
+    alert("Select Colour");
+    return;
+  }
+
+  const sizeRows =
+    document.querySelectorAll(".size-row");
+
+  const payload = [];
+
+  let hasError = false;
+
+  sizeRows.forEach(row => {
+
+    const size =
+      row.querySelector(".size").value;
+
+    const qty =
+      row.querySelector(".qty").value;
+
+    if (!size || !qty) {
+      hasError = true;
+      return;
+    }
+
+    payload.push({
+      IoNumber: ioNumber,
+      Colour: colour,
+      Size: size,
+      Quantity: parseInt(qty)
+    });
+
+  });
+
+  if (hasError) {
+    alert("Please enter Size and Quantity for all rows");
+    return;
+  }
+
+  if (payload.length === 0) {
+    alert("Add at least one Size");
+    return;
+  }
+
+  console.log("Payload:", payload);
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/api/ioInset`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      alert(result.msg || "Save Failed");
+      return;
+    }
+
+    alert("Saved Successfully");
+
+    // Close Modal
+    document.getElementById("ioModal").style.display = "none";
+
+    // Clear Form
+    document.getElementById("ioNumber").value = "";
+    document.getElementById("colour").value = "";
+
+    document.getElementById("sizeContainer").innerHTML = `
+      <div class="size-row">
+        <select class="size">
+          <option value="">Select Size</option>
+          <option>S</option>
+          <option>M</option>
+          <option>L</option>
+          <option>XL</option>
+          <option>XXL</option>
+        </select>
+
+        <input type="number"
+               class="qty"
+               placeholder="Quantity">
+
+        <button type="button"
+                class="add-size">+</button>
+      </div>
+    `;
+
+    // Reload Table
+    const tableResponse =
+      await fetch(`${API_BASE}/api/io`);
+
+    const tableResult =
+      await tableResponse.json();
+
+    if (tableResult.ok) {
+      bindTable(tableResult.data);
+    }
+
+  } catch (err) {
+    debugger
+    console.error(err);
+    alert("Server Error");
+  }
+}catch(err){
+
+  console.error(err);
+  alert("Server Error");
+
+}
+finally{
+hideLoader();
+saveBtn.disabled = false;
+saveBtn.textContent = "Save";
+
+}
+
+});
 function showView(name) {
   Object.values(views).forEach(v => v.style.display = "none");
   if (views[name]) views[name].style.display = "block";
