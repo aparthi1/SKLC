@@ -45,7 +45,7 @@ loginForm.addEventListener("submit", async (e) => {
     loginError.style.display = "block";
     return;
   }
-  showLoader("Io Fetching...");
+ 
   try {
     const r = await fetch(`${API_BASE}/api/login`, {
       method: "POST",
@@ -61,7 +61,7 @@ loginForm.addEventListener("submit", async (e) => {
       loginError.style.display = "block";
       return;
     }
-
+    showLoader("Io Fetching...");
     const response = await fetch(`${API_BASE}/api/io`);
     const result = await response.json();
   
