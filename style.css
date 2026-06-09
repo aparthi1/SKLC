@@ -570,3 +570,23 @@ nav.nav {
         #ffc107
     );
 }
+.logout-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  background:#dc3545;
+  color:white;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  transition:.3s;
+}
+
+.logout-btn:hover{
+  transform:translateY(-2px);
+  background:#bb2d3b;
+}

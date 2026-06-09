@@ -1,17 +1,39 @@
+
+const API_BASE = "https://sklc.onrender.com";
 let allData = [];
 let currentPage = 1;
 const pageSize = 10;
 let filteredData = [];
+const views = {
+  Table: document.getElementById("view-table"),
+  login: document.getElementById("view-login"),
+};
 
 document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn =
+  localStorage.getItem("isLoggedIn");
 
-  //const API_BASE = "http://localhost:8080"; 
-  const API_BASE = "https://sklc.onrender.com"; 
+const loginExpiry =
+  localStorage.getItem("loginExpiry");
 
-  const views = {
-    Table: document.getElementById("view-table"),
-    login: document.getElementById("view-login"),
-  };
+if (
+  isLoggedIn === "true" &&
+  loginExpiry &&
+  Date.now() < Number(loginExpiry)
+) {
+
+  loadTableData();
+
+} else {
+
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("loginExpiry");
+
+  showView("login");
+}
+  //const API_BASE = "http://localhost:8080";  
+
+  
   
  // login
  const loginForm = document.getElementById("loginForm");
@@ -61,15 +83,15 @@ loginForm.addEventListener("submit", async (e) => {
       loginError.style.display = "block";
       return;
     }
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", username);
+    localStorage.setItem(
+      "loginExpiry",
+      Date.now() + (24 * 60 * 60 * 1000)
+  );
+
     showLoader("Io Fetching...");
-    const response = await fetch(`${API_BASE}/api/io`);
-    const result = await response.json();
-  
-    if (result.ok) {
-      bindTable(result.data);
-      showView("Table");
-      populateFilters(result.data);
-    }
+    await loadTableData();
   } catch (err) {
     hideLoader();
     loginError.textContent = "Network error";
@@ -78,10 +100,7 @@ loginForm.addEventListener("submit", async (e) => {
     hideLoader();
   }
 
-  function showView(name) {
-    Object.values(views).forEach(v => v.style.display = "none");
-    if (views[name]) views[name].style.display = "block";
-  }
+  
   document.getElementById("saveIO")
   .addEventListener("click", async () => {
     showLoader();
@@ -299,7 +318,21 @@ document
 });
 });
 // Functions 
+function showView(name) {
+  Object.values(views).forEach(v => v.style.display = "none");
+  if (views[name]) views[name].style.display = "block";
+  const logoutBtn =
+        document.getElementById("btnLogout");
+  if (name === "login") {
 
+    logoutBtn.style.display = "none";
+
+} else {
+
+    logoutBtn.style.display = "flex";
+
+}
+}
 function showLoader(text="Saving…") {
   const g = document.getElementById("globalLoader");
   if (!g) return;
@@ -805,3 +838,43 @@ async function exportExcel(
       link.href
   );
 }
+async function loadTableData() {
+
+  showLoader("Loading...");
+
+  try {
+
+      const response =
+          await fetch(`${API_BASE}/api/io`);
+
+      const result =
+          await response.json();
+
+      if (result.ok) {
+
+          bindTable(result.data);
+          populateFilters(result.data);
+          showView("Table");
+
+      }
+
+  } catch (err) {
+
+      console.error(err);
+
+  } finally {
+
+      hideLoader();
+
+  }
+}
+document
+.getElementById("btnLogout")
+.addEventListener("click", () => {
+
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+
+    location.reload();
+
+});
