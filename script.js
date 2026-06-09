@@ -45,7 +45,7 @@ loginForm.addEventListener("submit", async (e) => {
     loginError.style.display = "block";
     return;
   }
-
+ 
   try {
     const r = await fetch(`${API_BASE}/api/login`, {
       method: "POST",
@@ -54,14 +54,14 @@ loginForm.addEventListener("submit", async (e) => {
     });
 
     const j = await r.json();
-    hideLoader();
+   
 
     if (!j.ok) {
       loginError.textContent = j.msg || "Login failed";
       loginError.style.display = "block";
       return;
     }
-
+    showLoader("Io Fetching...");
     const response = await fetch(`${API_BASE}/api/io`);
     const result = await response.json();
   
@@ -74,6 +74,8 @@ loginForm.addEventListener("submit", async (e) => {
     hideLoader();
     loginError.textContent = "Network error";
     loginError.style.display = "block";
+  }finally{
+    hideLoader();
   }
 
   function showView(name) {
