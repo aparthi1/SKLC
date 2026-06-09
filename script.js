@@ -1,17 +1,39 @@
+
+const API_BASE = "https://sklc.onrender.com";
 let allData = [];
 let currentPage = 1;
 const pageSize = 10;
 let filteredData = [];
+const views = {
+  Table: document.getElementById("view-table"),
+  login: document.getElementById("view-login"),
+};
 
 document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn =
+  localStorage.getItem("isLoggedIn");
 
-  //const API_BASE = "http://localhost:8080"; 
-  const API_BASE = "https://sklc.onrender.com"; 
+const loginExpiry =
+  localStorage.getItem("loginExpiry");
 
-  const views = {
-    Table: document.getElementById("view-table"),
-    login: document.getElementById("view-login"),
-  };
+if (
+  isLoggedIn === "true" &&
+  loginExpiry &&
+  Date.now() < Number(loginExpiry)
+) {
+
+  loadTableData();
+
+} else {
+
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("loginExpiry");
+
+  showView("login");
+}
+  //const API_BASE = "http://localhost:8080";  
+
+  
   
  // login
  const loginForm = document.getElementById("loginForm");
@@ -61,15 +83,15 @@ loginForm.addEventListener("submit", async (e) => {
       loginError.style.display = "block";
       return;
     }
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", username);
+    localStorage.setItem(
+      "loginExpiry",
+      Date.now() + (24 * 60 * 60 * 1000)
+  );
+
     showLoader("Io Fetching...");
-    const response = await fetch(`${API_BASE}/api/io`);
-    const result = await response.json();
-  
-    if (result.ok) {
-      bindTable(result.data);
-      showView("Table");
-      populateFilters(result.data);
-    }
+    await loadTableData();
   } catch (err) {
     hideLoader();
     loginError.textContent = "Network error";
@@ -78,153 +100,8 @@ loginForm.addEventListener("submit", async (e) => {
     hideLoader();
   }
 
-  function showView(name) {
-    Object.values(views).forEach(v => v.style.display = "none");
-    if (views[name]) views[name].style.display = "block";
-  }
-  document.getElementById("saveIO")
-  .addEventListener("click", async () => {
-    showLoader();
-    const saveBtn = document.getElementById("saveIO");
-    try{
-      saveBtn.disabled = true;
-      saveBtn.textContent = "Saving...";
-    const ioNumber =
-      document.getElementById("ioNumber").value.trim();
   
-    const colour =
-      document.getElementById("colour").value;
-  
-    if (!ioNumber) {
-      alert("Enter IO Number");
-      return;
-    }
-  
-    if (!colour) {
-      alert("Select Colour");
-      return;
-    }
-  
-    const sizeRows =
-      document.querySelectorAll(".size-row");
-  
-    const payload = [];
-  
-    let hasError = false;
-  
-    sizeRows.forEach(row => {
-  
-      const size =
-        row.querySelector(".size").value;
-  
-      const qty =
-        row.querySelector(".qty").value;
-  
-      if (!size || !qty) {
-        hasError = true;
-        return;
-      }
-  
-      payload.push({
-        IoNumber: ioNumber,
-        Colour: colour,
-        Size: size,
-        Quantity: parseInt(qty)
-      });
-  
-    });
-  
-    if (hasError) {
-      alert("Please enter Size and Quantity for all rows");
-      return;
-    }
-  
-    if (payload.length === 0) {
-      alert("Add at least one Size");
-      return;
-    }
-  
-    console.log("Payload:", payload);
-  
-    try {
-  
-      const response = await fetch(
-        `${API_BASE}/api/ioInset`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        }
-      );
-  
-      const result = await response.json();
-  
-      if (!result.ok) {
-        alert(result.msg || "Save Failed");
-        return;
-      }
-  
-      alert("Saved Successfully");
-  
-      // Close Modal
-      document.getElementById("ioModal").style.display = "none";
-  
-      // Clear Form
-      document.getElementById("ioNumber").value = "";
-      document.getElementById("colour").value = "";
-  
-      document.getElementById("sizeContainer").innerHTML = `
-        <div class="size-row">
-          <select class="size">
-            <option value="">Select Size</option>
-            <option>S</option>
-            <option>M</option>
-            <option>L</option>
-            <option>XL</option>
-            <option>XXL</option>
-          </select>
-  
-          <input type="number"
-                 class="qty"
-                 placeholder="Quantity">
-  
-          <button type="button"
-                  class="add-size">+</button>
-        </div>
-      `;
-  
-      // Reload Table
-      const tableResponse =
-        await fetch(`${API_BASE}/api/io`);
-  
-      const tableResult =
-        await tableResponse.json();
-  
-      if (tableResult.ok) {
-        bindTable(tableResult.data);
-      }
-  
-    } catch (err) {
-      debugger
-      console.error(err);
-      alert("Server Error");
-    }
-  }catch(err){
 
-    console.error(err);
-    alert("Server Error");
- 
- }
- finally{
-  hideLoader();
-  saveBtn.disabled = false;
-  saveBtn.textContent = "Save";
- 
- }
-  
-  });
 });
 
 
@@ -299,7 +176,164 @@ document
 });
 });
 // Functions 
+document.getElementById("saveIO")
+.addEventListener("click", async () => {
+  showLoader();
+  const saveBtn = document.getElementById("saveIO");
+  try{
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+  const ioNumber =
+    document.getElementById("ioNumber").value.trim();
 
+  const colour =
+    document.getElementById("colour").value;
+
+  if (!ioNumber) {
+    alert("Enter IO Number");
+    return;
+  }
+
+  if (!colour) {
+    alert("Select Colour");
+    return;
+  }
+
+  const sizeRows =
+    document.querySelectorAll(".size-row");
+
+  const payload = [];
+
+  let hasError = false;
+
+  sizeRows.forEach(row => {
+
+    const size =
+      row.querySelector(".size").value;
+
+    const qty =
+      row.querySelector(".qty").value;
+
+    if (!size || !qty) {
+      hasError = true;
+      return;
+    }
+
+    payload.push({
+      IoNumber: ioNumber,
+      Colour: colour,
+      Size: size,
+      Quantity: parseInt(qty)
+    });
+
+  });
+
+  if (hasError) {
+    alert("Please enter Size and Quantity for all rows");
+    return;
+  }
+
+  if (payload.length === 0) {
+    alert("Add at least one Size");
+    return;
+  }
+
+  console.log("Payload:", payload);
+
+  try {
+
+    const response = await fetch(
+      `${API_BASE}/api/ioInset`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!result.ok) {
+      alert(result.msg || "Save Failed");
+      return;
+    }
+
+    alert("Saved Successfully");
+
+    // Close Modal
+    document.getElementById("ioModal").style.display = "none";
+
+    // Clear Form
+    document.getElementById("ioNumber").value = "";
+    document.getElementById("colour").value = "";
+
+    document.getElementById("sizeContainer").innerHTML = `
+      <div class="size-row">
+        <select class="size">
+          <option value="">Select Size</option>
+          <option>S</option>
+          <option>M</option>
+          <option>L</option>
+          <option>XL</option>
+          <option>XXL</option>
+        </select>
+
+        <input type="number"
+               class="qty"
+               placeholder="Quantity">
+
+        <button type="button"
+                class="add-size">+</button>
+      </div>
+    `;
+
+    // Reload Table
+    const tableResponse =
+      await fetch(`${API_BASE}/api/io`);
+
+    const tableResult =
+      await tableResponse.json();
+
+    if (tableResult.ok) {
+      bindTable(tableResult.data);
+    }
+
+  } catch (err) {
+    debugger
+    console.error(err);
+    alert("Server Error");
+  }
+}catch(err){
+
+  console.error(err);
+  alert("Server Error");
+
+}
+finally{
+hideLoader();
+saveBtn.disabled = false;
+saveBtn.textContent = "Save";
+
+}
+
+});
+function showView(name) {
+  Object.values(views).forEach(v => v.style.display = "none");
+  if (views[name]) views[name].style.display = "block";
+  const logoutBtn =
+        document.getElementById("btnLogout");
+  if (name === "login") {
+
+    logoutBtn.style.display = "none";
+
+} else {
+
+    logoutBtn.style.display = "flex";
+
+}
+}
 function showLoader(text="Saving…") {
   const g = document.getElementById("globalLoader");
   if (!g) return;
@@ -805,3 +839,43 @@ async function exportExcel(
       link.href
   );
 }
+async function loadTableData() {
+
+  showLoader("Loading...");
+
+  try {
+
+      const response =
+          await fetch(`${API_BASE}/api/io`);
+
+      const result =
+          await response.json();
+
+      if (result.ok) {
+
+          bindTable(result.data);
+          populateFilters(result.data);
+          showView("Table");
+
+      }
+
+  } catch (err) {
+
+      console.error(err);
+
+  } finally {
+
+      hideLoader();
+
+  }
+}
+document
+.getElementById("btnLogout")
+.addEventListener("click", () => {
+
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+
+    location.reload();
+
+});
